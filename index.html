@@ -778,7 +778,7 @@ textarea.copy{width:100%;min-height:120px;background:var(--night);color:var(--in
 .consent input{width:22px;height:22px;margin-top:1px;accent-color:var(--gold)}.pmsg{margin:6px 0 0;color:var(--ember)}
 .dlbox{display:grid;gap:8px;justify-items:center;margin-top:6px}.dlbox a{color:var(--gold)}
 .dlsec{display:grid;gap:12px}
-.ills.five{grid-template-columns:repeat(5,minmax(0,1fr))}@media (max-width:1000px){.ills.five{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (max-width:700px){.ills.five{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:480px){.ills.five{grid-template-columns:minmax(0,1fr)}}.myrep{border-color:var(--gold)}.myrep .vbody{gap:10px}.myrep-h{color:var(--gold);font-size:17px}.dlhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}.dlhead h3{color:var(--gold);font-size:20px}
+.ills.five{grid-template-columns:repeat(5,minmax(0,1fr))}@media (max-width:1000px){.ills.five{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (max-width:700px){.ills.five{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:480px){.ills.five{grid-template-columns:minmax(0,1fr)}}.myrep{border-color:var(--gold)}.fullrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;text-align:center}.fullnote{flex-basis:100%;text-align:center}#dmFullMsg{text-align:center}.modgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}.modgrid .modrep{justify-content:flex-start}.modgrid .btn{width:100%}.lockt{font-size:.95em}.myrep .btn:disabled{opacity:.42;filter:grayscale(.6);cursor:not-allowed}.myrep .vbody{gap:10px}.myrep-h{color:var(--gold);font-size:17px}.dlhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}.dlhead h3{color:var(--gold);font-size:20px}
 .dltag{font-size:12.5px;font-weight:800;letter-spacing:.04em;padding:5px 11px;border-radius:999px;border:1px solid var(--gold);background:rgba(233,185,73,.14);color:var(--gold)}
 .ills{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 @media (max-width:900px){.ills{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:560px){.ills{grid-template-columns:minmax(0,1fr)}}
@@ -3438,11 +3438,17 @@ function wireMakerBox(root){
 
 /* ---------- the Downloads section (landing page, map and final report) ---------- */
 function myReportsHTML(){
-  if(!S.hero)return '';const fins=REALMS.filter(done),all=fins.length===8;
+  const fins=REALMS.filter(r=>S.hero&&done(r)),all=fins.length===8;
+  const lock=t=>`<span class="lockt" aria-hidden="true">🔒</span> ${t}`;
   return `<div class="vbox myrep"><div class="vbody" style="padding-top:14px">
-    <div><strong class="myrep-h">Your PDF reports</strong><span class="note" style="display:block">Each module's report is ready once you choose its final attempt. The full report unlocks after all 8 modules.</span></div>
-    ${all?`<div class="modrep"><button class="btn small" type="button" id="dmFull">Download full report (PDF)</button><span class="note" id="dmFullMsg" role="status"></span></div>`:`<span class="note">Full report: ${fins.length} of 8 modules finished.</span>`}
-    ${fins.length?`<div class="modlist">${fins.map(r=>modBtnHTML(r,'dm'+r.hour,true)).join('')}</div>`:'<span class="note">No module reports yet. Finish a module and choose your final attempt.</span>'}
+    <div><strong class="myrep-h">Your PDF reports</strong><span class="note" style="display:block">Each module report unlocks when you choose that module's final attempt.</span></div>
+    <div class="fullrow">
+      <button class="btn" type="button" id="dmFull" ${all?'':'disabled aria-disabled="true"'}>${all?'Download full report (PDF)':lock('Full report (PDF)')}</button>
+      <button class="btn ghost" type="button" id="dmDocx" ${all?'':'disabled aria-disabled="true"'}>${all?'One-page study sheet (Word)':lock('Study sheet (Word)')}</button>
+      <span class="note fullnote">${all?'All 8 modules are complete. Your full report and study sheet are ready.':`The full report and the study sheet unlock after all 8 modules are finished. You have finished ${fins.length} of 8.`}</span>
+    </div>
+    <span class="note" id="dmFullMsg" role="status"></span>
+    <div class="modgrid">${REALMS.map(r=>{const ok=fins.includes(r);return `<div class="modrep"><button class="btn small ${ok?'':'ghost'}" type="button" id="dm${r.hour}" ${ok?'':'disabled aria-disabled="true"'} title="${ok?'':'Choose a final attempt for this module to unlock its report'}">${ok?`Hour ${r.hour} module report (PDF)`:lock(`Hour ${r.hour} module report`)}</button><span class="note" id="dm${r.hour}Msg" role="status"></span></div>`}).join('')}</div>
   </div></div>`;
 }
 async function downloadFullPDF(btn,msg){
@@ -3456,8 +3462,9 @@ function downloadsSectionHTML(top){
 }
 function openCardBox(root){const d=(root||document).querySelector('#cardBox');if(!d)return false;d.open=true;d.scrollIntoView({behavior:'smooth',block:'start'});return true}
 function wireDownloads(root){
-  REALMS.forEach(r=>{if(root.querySelector('#dm'+r.hour))wireModBtn(root,r,'dm'+r.hour)});
+  REALMS.forEach(r=>{const b=root.querySelector('#dm'+r.hour);if(b&&!b.disabled)wireModBtn(root,r,'dm'+r.hour)});
   const fb=root.querySelector('#dmFull');if(fb)fb.onclick=()=>{AudioEngine.init();downloadFullPDF(fb,root.querySelector('#dmFullMsg'))};
+  const db=root.querySelector('#dmDocx');if(db)db.onclick=()=>{AudioEngine.init();downloadStudyDocx(db,root.querySelector('#dmFullMsg'))};
   wireCardBox(root);wireMakerBox(root);wireTransferBox(root);wireVerifyBox(root);
   root.querySelectorAll('[data-c="jump"]').forEach(b=>b.onclick=()=>{AudioEngine.init();if(!openCardBox(root))openCantDownload()});
 }

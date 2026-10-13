@@ -777,7 +777,8 @@ textarea.copy{width:100%;min-height:120px;background:var(--night);color:var(--in
 .consent{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;margin-top:12px;padding:12px;border:1px solid var(--gold-dim);border-radius:10px;background:rgba(233,185,73,.08);font-size:14.5px;line-height:1.4;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer}
 .consent input{width:22px;height:22px;margin-top:1px;accent-color:var(--gold)}.pmsg{margin:6px 0 0;color:var(--ember)}
 .dlbox{display:grid;gap:8px;justify-items:center;margin-top:6px}.dlbox a{color:var(--gold)}
-.dlsec{display:grid;gap:12px}.dlhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}.dlhead h3{color:var(--gold);font-size:20px}
+.dlsec{display:grid;gap:12px}
+.ills.five{grid-template-columns:repeat(5,minmax(0,1fr))}@media (max-width:1000px){.ills.five{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (max-width:700px){.ills.five{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:480px){.ills.five{grid-template-columns:minmax(0,1fr)}}.myrep{border-color:var(--gold)}.myrep .vbody{gap:10px}.myrep-h{color:var(--gold);font-size:17px}.dlhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}.dlhead h3{color:var(--gold);font-size:20px}
 .dltag{font-size:12.5px;font-weight:800;letter-spacing:.04em;padding:5px 11px;border-radius:999px;border:1px solid var(--gold);background:rgba(233,185,73,.14);color:var(--gold)}
 .ills{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 @media (max-width:900px){.ills{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:560px){.ills{grid-template-columns:minmax(0,1fr)}}
@@ -3320,6 +3321,23 @@ const ILL={
     <rect x="52" y="16" width="64" height="12" fill="#141734"/>${lines(60,40,[60,74,50],SV.ink)}<rect x="56" y="96" width="30" height="12" rx="2" fill="#c0392b"/><text x="71" y="105" text-anchor="middle" font-size="8" font-weight="800" fill="#fff" font-family="sans-serif">PDF</text>
     <g transform="translate(158 88)"><circle r="14" fill="${SV.green}"/><path d="M0 -7 V5 M-5 1 L0 6 L5 1" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`,'A PDF page with a score watermark and a green download check')
 };
+
+/* drawings for the course-copy transfer steps */
+Object.assign(ILL,{
+  xcopy:svgWrap(`<rect x="14" y="10" width="172" height="100" rx="7" fill="#1d2248" stroke="#2f3566"/><text x="24" y="26" font-size="8.5" font-weight="800" fill="${SV.gold}" font-family="sans-serif">THIS PAGE (WHERE YOU PLAYED)</text>
+    <rect x="24" y="34" width="152" height="26" rx="4" fill="#0b0d1c" stroke="${SV.violet}"/><text x="30" y="45" font-size="7.6" font-family="monospace" fill="#efe8d8">ANATOMICA-TRANSFER-1.</text><text x="30" y="55" font-size="7.6" font-family="monospace" fill="#a3a0c2">zH4sIAAAAAAAA72Ww…</text>
+    ${btn(24,70,92,'Copy transfer code',null,8.4)}${ptr(113,84)}${chk(132,79,7)}<text x="142" y="82.5" font-size="9" font-weight="700" fill="${SV.green}" font-family="sans-serif">Copied</text>`,'Selecting Copy transfer code; the code is copied'),
+  xsave:svgWrap(`<rect x="14" y="10" width="172" height="100" rx="7" fill="${SV.paper}"/><rect x="14" y="10" width="172" height="16" rx="7" fill="${SV.edge}"/><text x="24" y="21.5" font-size="9" font-weight="700" fill="${SV.ink}" font-family="sans-serif">New email</text>
+    <text x="24" y="40" font-size="8.5" fill="${SV.ink}" font-family="sans-serif"><tspan font-weight="700">To:</tspan> me@school.edu</text><text x="24" y="54" font-size="8.5" fill="${SV.ink}" font-family="sans-serif"><tspan font-weight="700">Subject:</tspan> My game transfer code</text>
+    <rect x="24" y="60" width="152" height="40" rx="3" fill="#fff" stroke="${SV.edge}"/><text x="30" y="72" font-size="7.4" font-family="monospace" fill="${SV.ink}">ANATOMICA-TRANSFER-1.zH4s</text>${lines(30,78,[132,120,90],SV.soft,7)}${chk(170,96,7)}`,'The whole code pasted into an email to yourself'),
+  xopen:svgWrap(`<rect x="14" y="10" width="172" height="100" rx="7" fill="#1d2248" stroke="#2f3566"/><rect x="14" y="10" width="172" height="18" rx="7" fill="#2a3060"/><circle cx="24" cy="19" r="2.6" fill="#ff6b4a"/><circle cx="32" cy="19" r="2.6" fill="${SV.gold}"/><circle cx="40" cy="19" r="2.6" fill="${SV.green}"/>
+    <rect x="48" y="13" width="130" height="12" rx="6" fill="#0b0d1c"/><text x="54" y="22" font-size="7.6" fill="#a3a0c2" font-family="sans-serif">course copy link from your instructor</text>
+    <text x="100" y="58" text-anchor="middle" font-size="15" font-weight="800" fill="${SV.gold}" font-family="serif">Realms of Anatomica</text><text x="100" y="72" text-anchor="middle" font-size="8" fill="#a3a0c2" font-family="sans-serif">course copy</text>${ptr(100,90)}`,'The course copy of the game opened from your instructor\'s link'),
+  ximport:svgWrap(`<rect x="14" y="10" width="172" height="100" rx="7" fill="#1d2248" stroke="#2f3566"/><text x="24" y="25" font-size="8.5" font-weight="800" fill="${SV.gold}" font-family="sans-serif">IMPORT A TRANSFER CODE</text>
+    <rect x="24" y="32" width="152" height="34" rx="4" fill="#0b0d1c" stroke="#2f3566"/><text x="30" y="44" font-size="7.6" font-family="monospace" fill="#efe8d8">ANATOMICA-TRANSFER-1.zH4s</text>${lines(30,51,[132,100],'#a3a0c2',7)}
+    ${btn(24,74,52,'Import')}${ptr(71,88)}${chk(100,83,7)}<text x="110" y="86.5" font-size="9" font-weight="700" fill="${SV.green}" font-family="sans-serif">Imported</text>`,'Pasting the whole code and selecting Import'),
+  xpdf:ILL.pdf
+});
 const stepCards=list=>`<ol class="ills">${list.map(([ill,t,d],k)=>`<li class="ill">${ILL[ill]}<div class="ilt"><span class="xn">${k+1}</span><strong>${t}</strong></div><p class="note">${d}</p></li>`).join('')}</ol>`;
 const COPY_HOWTO=`<p class="note howto"><strong>How to copy and paste:</strong> Windows: Ctrl+A to select all, Ctrl+C to copy, Ctrl+V to paste. Mac: Cmd+A, Cmd+C, Cmd+V. Phone or tablet: press and hold the text, tap <strong>Select All</strong>, then <strong>Copy</strong>; press and hold where you want it, then tap <strong>Paste</strong>.</p>`;
 
@@ -3419,12 +3437,27 @@ function wireMakerBox(root){
 }
 
 /* ---------- the Downloads section (landing page, map and final report) ---------- */
+function myReportsHTML(){
+  if(!S.hero)return '';const fins=REALMS.filter(done),all=fins.length===8;
+  return `<div class="vbox myrep"><div class="vbody" style="padding-top:14px">
+    <div><strong class="myrep-h">Your PDF reports</strong><span class="note" style="display:block">Each module's report is ready once you choose its final attempt. The full report unlocks after all 8 modules.</span></div>
+    ${all?`<div class="modrep"><button class="btn small" type="button" id="dmFull">Download full report (PDF)</button><span class="note" id="dmFullMsg" role="status"></span></div>`:`<span class="note">Full report: ${fins.length} of 8 modules finished.</span>`}
+    ${fins.length?`<div class="modlist">${fins.map(r=>modBtnHTML(r,'dm'+r.hour,true)).join('')}</div>`:'<span class="note">No module reports yet. Finish a module and choose your final attempt.</span>'}
+  </div></div>`;
+}
+async function downloadFullPDF(btn,msg){
+  btn.disabled=true;
+  await deliverPDF(async()=>{stampCompletion();const vl=await verificationLine();return buildPDF(vl).output('blob')},`TEAS-Bootcamp-Report-${safeFile(S.hero)}.pdf`,msg,'Report saved. Send the PDF to your instructor.');
+  btn.disabled=false;
+}
 function downloadsSectionHTML(top){
-  return `<section class="dlsec" aria-labelledby="dlh"><div class="dlhead"><h3 id="dlh">Downloads</h3><button type="button" class="dltag" data-c="jump">Can't download? Submit your results card</button></div>
-    ${top||''}${cardBoxHTML()}${transferBoxHTML()}${makerBoxHTML()}${verifyBoxHTML()}</section>`;
+  return `<section class="dlsec" aria-labelledby="dlh"><div class="dlhead"><h3 id="dlh">Downloads</h3></div>
+    ${top||myReportsHTML()}${cardBoxHTML()}${transferBoxHTML()}${makerBoxHTML()}${verifyBoxHTML()}</section>`;
 }
 function openCardBox(root){const d=(root||document).querySelector('#cardBox');if(!d)return false;d.open=true;d.scrollIntoView({behavior:'smooth',block:'start'});return true}
 function wireDownloads(root){
+  REALMS.forEach(r=>{if(root.querySelector('#dm'+r.hour))wireModBtn(root,r,'dm'+r.hour)});
+  const fb=root.querySelector('#dmFull');if(fb)fb.onclick=()=>{AudioEngine.init();downloadFullPDF(fb,root.querySelector('#dmFullMsg'))};
   wireCardBox(root);wireMakerBox(root);wireTransferBox(root);wireVerifyBox(root);
   root.querySelectorAll('[data-c="jump"]').forEach(b=>b.onclick=()=>{AudioEngine.init();if(!openCardBox(root))openCantDownload()});
 }
@@ -3592,7 +3625,8 @@ function transferGuideHTML(){
   const step=(n,title,body,ph)=>`<li class="xs" data-step="${n}"><span class="xn" aria-hidden="true">${n}</span><div class="xb"><strong>${title}</strong>${body}</div></li>`;
   return `<div class="xguide">
     <p class="xlead">If a PDF download fails, or you see <em>"Downloads from this artifact are only available to members of its organization"</em>, your results are <strong>not lost</strong>. They are saved in this browser. Move them to the course copy of the game and download your PDFs there.</p>
-    <div class="xflow" aria-hidden="true"><span>This page</span><i>→</i><span>Transfer code</span><i>→</i><span>Email or note</span><i>→</i><span>Course copy</span><i>→</i><span>PDF report</span></div>
+    ${stepCards([['xcopy','Copy your transfer code','On the page where you played, select Copy transfer code.'],['xsave','Save it somewhere safe','Paste the WHOLE code into an email or note to yourself.'],['xopen','Open the course copy','Use the link from your instructor, in a regular (not private) window.'],['ximport','Paste and Import','Open this guide there, paste the whole code and select Import.'],['xpdf','Download your PDFs','Your results are back: download your module and full reports.']]).replace('<ol class="ills">','<ol class="ills five">')}
+    <div class="xflow" aria-hidden="true" hidden><span>This page</span><i>→</i><span>Transfer code</span><i>→</i><span>Email or note</span><i>→</i><span>Course copy</span><i>→</i><span>PDF report</span></div>
     <div class="xphase">Part A · On this page (where you played)</div>
     <ol class="xsteps" start="1">
       ${step(1,'Copy your transfer code',S.hero?`<span class="note">Select the button. A long code starting with <code>ANATOMICA-TRANSFER-1</code> is copied.</span>
